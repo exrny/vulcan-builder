@@ -1,0 +1,12 @@
+*.pyc
+apidocs
+MANIFEST
+dist
+.project
+build
+.pydevproject
+.ropeproject
+*.out
+*.egg-info
+.pypirc
+append_creds.sh
