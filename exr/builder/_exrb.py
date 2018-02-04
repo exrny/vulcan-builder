@@ -368,8 +368,8 @@ def print_err(line):
     sys.stderr.flush()
 
 nsh = None
-unbuffered_stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+# unbuffered_stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
 if os.environ.get('TRAVIS', 'false') == 'true':
-    nsh = sh(_out=unbuffered_stdout, _err_to_out=True)
+    nsh = sh(_out=sys.stdout, _err_to_out=True, _out_bufsize=0)
 else:
-    nsh = sh(_out=unbuffered_stdout, _err_to_out=True, _tty_in=True)
+    nsh = sh(_out=sys.stdout, _err_to_out=True, _out_bufsize=0, _tty_in=True)
