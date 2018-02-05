@@ -356,7 +356,7 @@ def json_serial(obj):
 def dump(obj):
   print('DUMP: {}'.format(json.dumps(obj, indent=1, default=json_serial)))
 
-# Navio shell overriden call
+# Exr shell overriden methods
 
 def print_out(line):
     sys.stdout.write(line)
