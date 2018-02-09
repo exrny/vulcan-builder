@@ -346,6 +346,7 @@ def _get_logger(module):
 def main():
     build(sys.argv[1:])
 
+
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
 
@@ -353,8 +354,10 @@ def json_serial(obj):
         return obj.isoformat()
     raise TypeError("Type %s not serializable" % type(obj))
 
+
 def dump(obj):
-  print('DUMP: {}'.format(json.dumps(obj, indent=1, default=json_serial)))
+    print('DUMP: {}'.format(json.dumps(obj, indent=1, default=json_serial)))
+
 
 # Exr shell overriden methods
 
