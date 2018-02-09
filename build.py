@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import subprocess, re, os
 from exr.builder import task
 
