@@ -6,15 +6,15 @@ Why I did this fork and what will happen here?
 This project was forked from Pynt. `Raghunandan
 Rao <https://github.com/rags/pynt>`__
 
-I appreciate work made by `Raghunandan Rao <https://github.com/rags>`__
-and will push any good parts of my changes to initial
+We appreciate work made by `Raghunandan Rao <https://github.com/rags>`__
+and will push any good parts of out changes to initial
 `rags/pynt <https://github.com/rags/pynt>`__ repo.
 
-Aim of this navio-builder project is to provide my clients with
-lightweight and easy to use python devops tool. I’m going to accumulate
-work done by `Raghunandan Rao <https://github.com/rags>`__ and other
-pynt contributers here. My own changes and new features will be
-implemented here and push as PR to original pynt repo.
+Aim of this exr-builder project is to support exrny.com applications
+with lightweight and easy to use python devops tool. We are going to
+accumulate work done by `Raghunandan Rao <https://github.com/rags>`__
+and other pynt contributers here. Our own changes and new features will
+be implemented here and pushed as PR to original pynt repo.
 
 A pynt of Python build.
 =======================
@@ -38,26 +38,26 @@ Todo Features
 Installation
 ------------
 
-You can install navio-builder from the Python Package Index (PyPI) or
-from source.
+You can install exr-builder from the Python Package Index (PyPI) or from
+source.
 
 Using pip
 
 .. code:: bash
 
-    $ pip install navio-builder
+    $ pip install exr-builder
 
 Using easy_install
 
 .. code:: bash
 
-    $ easy_install navio-builder
+    $ easy_install exr-builder
 
 Example
 -------
 
-The build script is written in pure Python and navio-builder takes care
-of managing any dependencies between tasks and generating a command line
+The build script is written in pure Python and exr-builder takes care of
+managing any dependencies between tasks and generating a command line
 interface.
 
 Writing build tasks is really simple, all you need to know is the @task
@@ -77,7 +77,7 @@ the dependency chains of all the dependent tasks.
     #!/usr/bin/python
 
     import sys
-    from navio.builder import task
+    from exr.builder import task
 
     @task()
     def clean():
@@ -119,16 +119,16 @@ the dependency chains of all the dependent tasks.
 
     __DEFAULT__=start_server
 
-**Running navio-builder tasks**
--------------------------------
+**Running exr-builder tasks**
+-----------------------------
 
 The command line interface and help is automatically generated. Task
 descriptions are extracted from function docstrings.
 
 .. code:: bash
 
-    $ nb -h
-    usage: nb [-h] [-l] [-v] [-f file] [task [task ...]]
+    $ exrb -h
+    usage: exrb [-h] [-l] [-v] [-f file] [task [task ...]]
 
     positional arguments:
       task                  perform specified task and all its dependencies
@@ -142,7 +142,7 @@ descriptions are extracted from function docstrings.
 
 .. code:: bash
 
-    $ nb -l
+    $ exrb -l
     Tasks in build file ./build.py:
       clean                       Clean build directory.
       copy_file                   
@@ -152,15 +152,15 @@ descriptions are extracted from function docstrings.
       start_server     [Default]  Start the server
       stop_server                 
 
-    Powered by navio-builder - A Lightweight Python Build Tool.
+    Powered by exr-builder - A Lightweight Python Build Tool.
 
-navio-builder takes care of dependencies between tasks. In the following
+exr-builder takes care of dependencies between tasks. In the following
 case start_server depends on clean, html and image generation (image
 task is ignored).
 
 .. code:: bash
 
-    $ nb #Runs the default task start_server. It does exactly what "nb start_server" would do.
+    $ exrb #Runs the default task start_server. It does exactly what "exrb start_server" would do.
     [ example.py - Starting task "clean" ]
     Cleaning build directory...
     [ example.py - Completed task "clean" ]
@@ -179,7 +179,7 @@ care of.
 
 .. code:: bash
 
-    $ nb cle ht cl
+    $ exrb cle ht cl
     [ example.py - Starting task "clean" ]
     Cleaning build directory...
     [ example.py - Completed task "clean" ]
@@ -193,11 +193,11 @@ care of.
 The ‘html’ task dependency ‘clean’ is run only once. But clean can be
 explicitly run again later.
 
-nb tasks can accept parameters from commandline.
+exrb tasks can accept parameters from commandline.
 
 .. code:: bash
 
-    $ nb "copy_file[/path/to/foo, path_to_bar]"
+    $ exrb "copy_file[/path/to/foo, path_to_bar]"
     [ example.py - Starting task "clean" ]
     Cleaning build directory...
     [ example.py - Completed task "clean" ]
@@ -205,11 +205,11 @@ nb tasks can accept parameters from commandline.
     Copying from /path/to/foo to path_to_bar
     [ example.py - Completed task "copy_file" ]
 
-nb can also accept keyword arguments.
+exrb can also accept keyword arguments.
 
 .. code:: bash
 
-    $ nb start[port=8888]
+    $ exrb start[port=8888]
     [ example.py - Starting task "clean" ]
     Cleaning build directory...
     [ example.py - Completed task "clean" ]
@@ -221,7 +221,7 @@ nb can also accept keyword arguments.
     Starting server at localhost:8888
     [ example.py - Completed task "start_server" ]
         
-    $ nb echo[hello,world,foo=bar,blah=123]
+    $ exrb echo[hello,world,foo=bar,blah=123]
     [ example.py - Starting task "echo" ]
     ('hello', 'world')
     {'blah': '123', 'foo': 'bar'}
@@ -241,7 +241,7 @@ into your main build file.
 Contributors/Contributing
 -------------------------
 
--  Raghunandan Rao - navio-builder is preceded by and forked from
+-  Raghunandan Rao - exr-builder is preceded by and forked from
    `pynt <https://github.com/rags/pynt>`__, which was created by
    `Raghunandan Rao <https://github.com/rags/pynt>`__.
 -  Calum J. Eadie - pynt is preceded by and forked from
@@ -249,7 +249,7 @@ Contributors/Contributing
    created by `Calum J. Eadie <https://github.com/CalumJEadie>`__.
 
 If you want to make changes the repo is at
-https://github.com/naviotech/navio-builder. You will need
+https://github.com/exrny/exr-builder. You will need
 `pytest <http://www.pytest.org>`__ to run the tests
 
 .. code:: bash
@@ -261,14 +261,14 @@ request <https://help.github.com/articles/using-pull-requests>`__ once
 you are done.
 
 If you find any bugs or need new features please raise a ticket in the
-`issues section <https://github.com/naviotech/navio-builder/issues>`__
-of the github repo.
+`issues section <https://github.com/exrny/exr-builder/issues>`__ of the
+github repo.
 
 License
 -------
 
-navio-builder is licensed under a `MIT
+exr-builder is licensed under a `MIT
 license <http://opensource.org/licenses/MIT>`__
 
-.. |Build Status| image:: https://travis-ci.org/naviotech/navio-builder.png?branch=master
-   :target: https://travis-ci.org/naviotech/navio-builder
+.. |Build Status| image:: https://travis-ci.org/exrny/exr-builder.png?branch=master
+   :target: https://travis-ci.org/exrny/exr-builder
