@@ -360,11 +360,13 @@ def dump(obj):
 
 def print_out(line):
     sys.stdout.write(line)
+    sys.stdout.write("\n")
     sys.stdout.flush()
 
 
 def print_err(line):
     sys.stderr.write(line)
+    sys.stderr.write("\n")
     sys.stderr.flush()
 
 nsh = None
