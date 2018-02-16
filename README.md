@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/exrny/exr-builder.png?branch=master)](https://travis-ci.org/exrny/exr-builder)
 
-Why I did this fork and what will happen here?
-==============================================
+EXR Builder
+===========
 
 This project is a fork of Pynt by [Raghunandan Rao](https://github.com/rags/pynt). We will contribute changes to the original rags/pynt repo.
 
