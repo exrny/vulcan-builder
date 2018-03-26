@@ -2,7 +2,8 @@
 Lightweight Python Build Tool
 '''
 
-from ._exrb import task, main, nsh, dump
+from exr.builder.common import nsh, dump
+from ._exrb import task, main
 import sh
 import pkgutil
 

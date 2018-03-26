@@ -12,9 +12,6 @@ import re
 import imp
 import sys
 import time
-import sh
-import json
-from datetime import datetime, date
 from exr.meta_builder import __version__
 
 _CREDIT_LINE = ("Powered by exrb %s "
@@ -345,35 +342,3 @@ def _get_logger(module):
 
 def main():
     build(sys.argv[1:])
-
-
-def json_serial(obj):
-    """JSON serializer for objects not serializable by default json code"""
-
-    if isinstance(obj, (datetime, date)):
-        return obj.isoformat()
-    raise TypeError("Type %s not serializable" % type(obj))
-
-
-def dump(obj):
-    print('DUMP: {}'.format(json.dumps(obj, indent=1, default=json_serial)))
-
-
-# Exr shell overriden methods
-
-def print_out(line):
-    sys.stdout.write(line)
-    sys.stdout.write("\n")
-    sys.stdout.flush()
-
-
-def print_err(line):
-    sys.stderr.write(line)
-    sys.stderr.write("\n")
-    sys.stderr.flush()
-
-nsh = None
-if os.environ.get('TRAVIS', 'false') == 'true':
-    nsh = sh(_out=sys.stdout, _err_to_out=True)
-else:
-    nsh = sh(_out=sys.stdout, _err_to_out=True, _tty_in=True)
