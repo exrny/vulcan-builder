@@ -1,20 +1,17 @@
 |Build Status|
 
-Why I did this fork and what will happen here?
-==============================================
+EXR Builder
+===========
 
-This project was forked from Pynt. `Raghunandan
-Rao <https://github.com/rags/pynt>`__
+This project is a fork of Pynt by `Raghunandan
+Rao <https://github.com/rags/pynt>`__. We will contribute changes to the
+original rags/pynt repo.
 
-We appreciate work made by `Raghunandan Rao <https://github.com/rags>`__
-and will push any good parts of out changes to initial
-`rags/pynt <https://github.com/rags/pynt>`__ repo.
+EXR Builder supports EXR’s applications via a lightweight, concise
+Python DevOps tool. We will develop our own improvements on the initial
+rags/pynt repo here and publish improvements to the original repo.
 
-Aim of this exr-builder project is to support exrny.com applications
-with lightweight and easy to use python devops tool. We are going to
-accumulate work done by `Raghunandan Rao <https://github.com/rags>`__
-and other pynt contributers here. Our own changes and new features will
-be implemented here and pushed as PR to original pynt repo.
+This is an EXR Open Source project.
 
 A pynt of Python build.
 =======================
