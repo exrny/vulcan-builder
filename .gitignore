@@ -11,3 +11,4 @@ build
 .pypirc
 append_creds.sh
 .pytest_cache
+exr/builder/async
