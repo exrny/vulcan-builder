@@ -3,6 +3,7 @@ import json
 import sys
 import os
 import sh
+import contextlib
 
 
 def json_serial(obj):
