@@ -203,7 +203,7 @@ def _run(
                 startTime = int(round(time.time() * 1000))
                 task(*(args or []), **(kwargs or {}))
                 stopTime = int(round(time.time() * 1000))
-            except:
+            except Exception:
                 stopTime = int(round(time.time() * 1000))
                 logger.critical("Error in task \"%s\". Time: %s sec" % (
                     task.name, (float(stopTime)-startTime)/1000))

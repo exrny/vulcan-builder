@@ -4,6 +4,7 @@ import sys
 import os
 import sh
 
+
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
 
@@ -14,6 +15,16 @@ def json_serial(obj):
 
 def dump(obj):
     print('DUMP: {}'.format(json.dumps(obj, indent=1, default=json_serial)))
+
+
+@contextlib.contextmanager
+def safe_cd(path):
+    starting_directory = os.getcwd()
+    try:
+        os.chdir(path)
+        yield
+    finally:
+        os.chdir(starting_directory)
 
 
 # Exr shell overriden methods
@@ -28,6 +39,7 @@ def print_err(line):
     sys.stderr.write(line)
     sys.stderr.write("\n")
     sys.stderr.flush()
+
 
 nsh = None
 if os.environ.get('TRAVIS', 'false') == 'true':

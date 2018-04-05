@@ -1,4 +1,4 @@
 pytest
+pycodestyle
 twine
 sh
-pep8
