@@ -12,13 +12,17 @@ import re
 import imp
 import sys
 import time
+import concurrent.futures
 from exr.meta_builder import __version__
 
 _CREDIT_LINE = ("Powered by exrb %s "
                 "- A Lightweight Python Build Tool." % __version__)
 _LOGGING_FORMAT = "[ %(name)s - %(message)s ]"
-_TASK_PATTERN = re.compile("^([^\[]+)(\[([^\]]*)\])?$")
+_TASK_PATTERN = re.compile("^([^\\[]+)(\\[([^\\]]*)\\])?$")
 # "^([^\[]+)(\[([^\],=]*(,[^\],=]+)*(,[^\],=]+=[^\],=]+)*)\])?$"
+
+
+thread_pool_executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
 
 
 def build(args):
@@ -78,6 +82,8 @@ def print_tasks(module, file):
         attributes = []
         if task.ignored:
             attributes.append('Ignored')
+        if task.async_task:
+            attributes.append('Async')
         if default and task.name == default.name:
             attributes.append('Default')
 
@@ -267,10 +273,28 @@ def task(*dependencies, **options):
         return Task(fn, dependencies, options)
     return decorator
 
+def async_task(*dependencies, **options):
+    for i, dependency in enumerate(dependencies):
+        if not Task.is_task(dependency):
+            if inspect.isfunction(dependency):
+                # Throw error specific to the most likely form of misuse.
+                if i == 0:
+                    raise Exception("Replace use of @task with @task().")
+                else:
+                    raise Exception("%s is not a task. "
+                                    "Each dependency should be a task."
+                                    % dependency)
+            else:
+                raise Exception("%s is not a task." % dependency)
+
+    def decorator(fn):
+        return Task(fn, dependencies, options, async_task=True)
+    return decorator
+
 
 class Task(object):
 
-    def __init__(self, func, dependencies, options):
+    def __init__(self, func, dependencies, options, **kwargs):
         """
         @type func: 0-ary function
         @type dependencies: list of Task objects
@@ -280,6 +304,7 @@ class Task(object):
         self.doc = inspect.getdoc(func) or ''
         self.dependencies = dependencies
         self.ignored = bool(options.get('ignore', False))
+        self.async_task = kwargs.get('async_task', False)
 
     def __call__(self, *args, **kwargs):
         self.func.__call__(*args, **kwargs)

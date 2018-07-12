@@ -69,6 +69,34 @@ class TestBuildSimple:
         assert len(ts) == 5
 
 
+class TestBuildWithAsyncTasks:
+
+
+    def setup_method(self, method):
+        from .build_scripts import async_tasks as module
+        self._module = module
+
+    def test_get_tasks(self):
+        tasks = _exrb._get_tasks(self._module)
+        assert len(tasks) == 6
+        assert [task for task in tasks if task.name == 'clean']
+        assert [task for task in tasks if task.name == 'html']
+        assert [task for task in tasks if task.name == 'images']
+        assert [task for task in tasks if task.name == 'android']
+        assert [task for task in tasks if task.name == 'ios']
+
+    def test_async_tasks_finish_order(self):
+        module = build(self._module, ["build_all"])
+        assert 'clean' in module.tasks_run
+        assert 'html' in module.tasks_run
+        assert 'images' in module.tasks_run
+        assert 'android' in module.tasks_run
+        assert 'ios' in module.tasks_run
+        assert 'build_all' in module.tasks_run
+        assert ['clean', 'html', 'images', 'android', 'ios', 'build_all'] == module.tasks_run
+
+
+
 class TestBuildWithDependencies:
 
     def test_get_tasks(self):
