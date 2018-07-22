@@ -14,6 +14,8 @@ import sys
 import time
 import concurrent.futures
 from exr.meta_builder import __version__
+from exr.builder.classes import CurrentThreadExecutor
+from exr.builder.classes import Task
 
 _CREDIT_LINE = ("Powered by exrb %s "
                 "- A Lightweight Python Build Tool." % __version__)
@@ -21,8 +23,8 @@ _LOGGING_FORMAT = "[ %(name)s - %(message)s ]"
 _TASK_PATTERN = re.compile("^([^\\[]+)(\\[([^\\]]*)\\])?$")
 # "^([^\[]+)(\[([^\],=]*(,[^\],=]+)*(,[^\],=]+=[^\],=]+)*)\])?$"
 
-
 thread_pool_executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
+current_thread_executor = CurrentThreadExecutor()
 
 
 def build(args):
@@ -107,7 +109,13 @@ def _run_default_task(module):
     default_task = _get_default_task(module)
     if not default_task:
         return False
-    _run(module, _get_logger(module), default_task, set())
+
+    completed_tasks = dict()
+    _run(module, _get_logger(module), default_task, completed_tasks)
+    for task in completed_tasks:
+        while not completed_tasks.get(task).result():
+            time.sleep(0.5)
+
     return True
 
 
@@ -120,10 +128,14 @@ def _run_from_task_names(module, task_names):
     # Create logger.
     logger = _get_logger(module)
     all_tasks = _get_tasks(module)
-    completed_tasks = set([])
+    completed_tasks = dict()
     for task_name in task_names:
         task, args, kwargs = _get_task(module, task_name, all_tasks)
         _run(module, logger, task, completed_tasks, True, args, kwargs)
+
+    for task in completed_tasks:
+        while not completed_tasks.get(task).result():
+            time.sleep(0.5)
 
 
 def _get_task(module, name, tasks):
@@ -191,37 +203,40 @@ def _run(
     # Satsify dependencies recursively. Maintain set of completed tasks so each
     # task is only performed once.
     for dependency in task.dependencies:
-        completed_tasks = _run(module, logger, dependency, completed_tasks)
+        _run(module, logger, dependency, completed_tasks)
+        for task_name in completed_tasks:
+            while not completed_tasks.get(task_name).result():
+                time.sleep(0.5)
 
     # Perform current task, if need to.
-    if from_command_line or task not in completed_tasks:
+    if from_command_line or task.name not in completed_tasks:
 
         if task.ignored:
 
-            logger.info("Ignoring task \"%s\"" % task.name)
+            logger.info("Ignoring task \"{}\"".format(task.name))
 
         else:
 
-            logger.info("Starting task \"%s\"" % task.name)
+            logger.info("Starting task \"{}\"".format(task.name))
 
             try:
-                # Run task.
-                startTime = int(round(time.time() * 1000))
-                task(*(args or []), **(kwargs or {}))
-                stopTime = int(round(time.time() * 1000))
+                if task.async_task:
+                    # executor = thread_pool_executor
+                    executor = current_thread_executor
+                else:
+                    executor = current_thread_executor
+
+                running_task = executor.submit(task, *(args or []), **(kwargs or {}))
+                completed_tasks[task.name] = running_task
             except Exception:
-                stopTime = int(round(time.time() * 1000))
-                logger.critical("Error in task \"%s\". Time: %s sec" % (
-                    task.name, (float(stopTime)-startTime)/1000))
+                logger.critical("Error starting task \"{name}\"".format(
+                    name=task.name))
                 logger.critical("Aborting build")
                 raise
 
-            logger.info("Completed task \"%s\". Time: %s sec" %
-                        (task.name, (float(stopTime)-startTime)/1000))
+        
 
-        completed_tasks.add(task)
-
-    return completed_tasks
+    return
 
 
 def _create_parser():
@@ -290,31 +305,6 @@ def async_task(*dependencies, **options):
     def decorator(fn):
         return Task(fn, dependencies, options, async_task=True)
     return decorator
-
-
-class Task(object):
-
-    def __init__(self, func, dependencies, options, **kwargs):
-        """
-        @type func: 0-ary function
-        @type dependencies: list of Task objects
-        """
-        self.func = func
-        self.name = func.__name__
-        self.doc = inspect.getdoc(func) or ''
-        self.dependencies = dependencies
-        self.ignored = bool(options.get('ignore', False))
-        self.async_task = kwargs.get('async_task', False)
-
-    def __call__(self, *args, **kwargs):
-        self.func.__call__(*args, **kwargs)
-
-    @classmethod
-    def is_task(cls, obj):
-        """
-        Returns true is an object is a build task.
-        """
-        return isinstance(obj, cls)
 
 
 def _get_tasks(module):

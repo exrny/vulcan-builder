@@ -87,6 +87,7 @@ class TestBuildWithAsyncTasks:
 
     def test_async_tasks_finish_order(self):
         module = build(self._module, ["build_all"])
+        
         assert 'clean' in module.tasks_run
         assert 'html' in module.tasks_run
         assert 'images' in module.tasks_run
@@ -111,10 +112,21 @@ class TestBuildWithDependencies:
     def test_dependencies_for_imported(self):
         from .build_scripts import default_task_and_import_dependencies
         tasks = _exrb._get_tasks(default_task_and_import_dependencies)
-        assert 7 == len(tasks)
-        assert [task for task in tasks if task.name == 'clean']
+        
+
+        assert 10 == len(tasks)
+        
+        assert [task for task in tasks if task.name == 'html']
+        assert [task for task in tasks if task.name == 'copy_file']
+        assert [task for task in tasks if task.name == 'echo']
+        assert [task for task in tasks if task.name == 'ignored']
         assert [task for task in tasks if task.name == 'local_task']
-        assert [task for task in tasks if task.name == 'android']
+        assert [task for task in tasks if task.name == 'task_with_imported_dependencies']
+        assert [task for task in tasks if task.name == 'clean']
+        assert [task for task in tasks if task.name == 'tests']
+        assert [task for task in tasks if task.name == 'start_server']
+        assert [task for task in tasks if task.name == 'append_to_file']
+        
         assert 3 == len([
             task for task in tasks
             if task.name == 'task_with_imported_dependencies'][0].dependencies
@@ -129,6 +141,7 @@ class TestBuildWithDependencies:
 
         module = build(default_task_and_import_dependencies,
                        ["task_with_imported_dependencies"], init_mod=mod_init)
+
         assert module.tasks_run == ['local_task',
                                     'task_with_imported_dependencies']
         assert module.build_with_params.tasks_run == ['clean[/tmp]', 'html']
