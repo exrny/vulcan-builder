@@ -71,7 +71,6 @@ class TestBuildSimple:
 
 class TestBuildWithAsyncTasks:
 
-
     def setup_method(self, method):
         from .build_scripts import async_tasks as module
         self._module = module
@@ -87,7 +86,7 @@ class TestBuildWithAsyncTasks:
 
     def test_async_tasks_finish_order(self):
         module = build(self._module, ["build_all"])
-        
+
         assert 'clean' in module.tasks_run
         assert 'html' in module.tasks_run
         assert 'images' in module.tasks_run
@@ -95,7 +94,6 @@ class TestBuildWithAsyncTasks:
         assert 'ios' in module.tasks_run
         assert 'build_all' in module.tasks_run
         assert ['clean', 'html', 'images', 'android', 'ios', 'build_all'] == module.tasks_run
-
 
 
 class TestBuildWithDependencies:
@@ -112,10 +110,9 @@ class TestBuildWithDependencies:
     def test_dependencies_for_imported(self):
         from .build_scripts import default_task_and_import_dependencies
         tasks = _exrb._get_tasks(default_task_and_import_dependencies)
-        
 
         assert 10 == len(tasks)
-        
+
         assert [task for task in tasks if task.name == 'html']
         assert [task for task in tasks if task.name == 'copy_file']
         assert [task for task in tasks if task.name == 'echo']
@@ -126,7 +123,7 @@ class TestBuildWithDependencies:
         assert [task for task in tasks if task.name == 'tests']
         assert [task for task in tasks if task.name == 'start_server']
         assert [task for task in tasks if task.name == 'append_to_file']
-        
+
         assert 3 == len([
             task for task in tasks
             if task.name == 'task_with_imported_dependencies'][0].dependencies
@@ -208,10 +205,10 @@ class TestOptions:
         tasks = _exrb._get_tasks(module)
         for task in tasks:
             if task.ignored:
-                assert re.findall('%s\s+%s\s+%s' %
-                                  (task.name, "\[Ignored\]", task.doc), stdout)
+                assert re.findall('%s\\s+%s\\s+%s' %
+                                  (task.name, "\\[Ignored\\]", task.doc), stdout)
             else:
-                assert re.findall('%s\s+%s' % (task.name, task.doc), stdout)
+                assert re.findall('%s\\s+%s' % (task.name, task.doc), stdout)
 
 
 class TestRuntimeError:

@@ -16,6 +16,7 @@ import concurrent.futures
 from exr.meta_builder import __version__
 from exr.builder.classes import CurrentThreadExecutor
 from exr.builder.classes import Task
+# from exr.builder.classes import LoggerWrapper
 
 _CREDIT_LINE = ("Powered by exrb %s "
                 "- A Lightweight Python Build Tool." % __version__)
@@ -203,7 +204,6 @@ def _run(
     # Satsify dependencies recursively. Maintain set of completed tasks so each
     # task is only performed once.
 
-    
     for dependency in task.dependencies:
         _run(module, logger, dependency, completed_tasks)
 
@@ -216,26 +216,26 @@ def _run(
     if from_command_line or task.name not in completed_tasks:
 
         if task.ignored:
-
             logger.info("Ignoring task \"{}\"".format(task.name))
-
         else:
-
-            logger.info("Starting task \"{}\"".format(task.name))
-
             try:
                 if task.async_task:
                     executor = thread_pool_executor
                 else:
                     executor = current_thread_executor
 
-                running_task = executor.submit(task, *(args or []), **(kwargs or {}))
+                task.set_logger(logger)
+                running_task = executor.submit(
+                    task,
+                    *(args or []),
+                    **(kwargs or {})
+                )
                 completed_tasks[task.name] = running_task
             except Exception:
                 logger.critical("Error starting task \"{name}\"".format(
                     name=task.name))
                 logger.critical("Aborting build")
-                raise        
+                raise
 
     return
 
@@ -288,6 +288,7 @@ def task(*dependencies, **options):
     def decorator(fn):
         return Task(fn, dependencies, options)
     return decorator
+
 
 def async_task(*dependencies, **options):
     for i, dependency in enumerate(dependencies):

@@ -1,6 +1,9 @@
 import inspect
 import time
+from datetime import datetime
 import logging
+from threading import Lock
+
 
 class Task(object):
 
@@ -15,9 +18,35 @@ class Task(object):
         self.dependencies = dependencies
         self.ignored = bool(options.get('ignore', False))
         self.async_task = kwargs.get('async_task', False)
+        self.logger = None
+
+    def __str__(self):
+        return self.name
 
     def __call__(self, *args, **kwargs):
-        self.func.__call__(*args, **kwargs)
+        if self.logger:
+            if self.async_task:
+                self.logger.info("Starting async task \"{}\" in background".format(self.name))
+            else:
+                self.logger.info("Starting task \"{}\"".format(self.name))
+
+        t = datetime.now()
+
+        self.result = self.func.__call__(*args, **kwargs)
+
+        if self.logger:
+            self.logger.info("Completed task \"{task_name}\". Time: {run_time} sec".format(
+                    task_name=self.name, run_time=(datetime.now() - t).seconds
+                )
+            )
+
+        return self.result
+
+    def set_future(self, future):
+        self.future = future
+
+    def set_logger(self, logger):
+        self.logger = logger
 
     @classmethod
     def is_task(cls, obj):
@@ -28,33 +57,19 @@ class Task(object):
 
 
 class CurrentThreadExecutor(object):
-  
-  def __init__(self):
-      pass
 
+    def __init__(self):
+        pass
 
-  def submit(self, task, *args, **kwargs):
-      try:
-          # Run task.
-          startTime = int(round(time.time() * 1000))
-          task(*(args or []), **(kwargs or {}))
-          stopTime = int(round(time.time() * 1000))
-      except Exception:
-          stopTime = int(round(time.time() * 1000))
-          # logger.critical("Error in task \"%s\". Time: %s sec" % (
-          #     task.name, (float(stopTime)-startTime)/1000))
-          # logger.critical("Aborting build")
-          raise
+    def submit(self, task, *args, **kwargs):
+        task(*(args or []), **(kwargs or {}))
+        return PseudoFutureTask()
 
-      # logger.info("Completed task \"%s\". Time: %s sec" %
-      #             (task.name, (float(stopTime)-startTime)/1000))
-
-      return PseudoFutureTask()      
 
 class PseudoFutureTask(object):
 
-  def __init__(self):
-    pass
+    def __init__(self):
+        pass
 
-  def running(self):
-    return False
+    def running(self):
+        return False

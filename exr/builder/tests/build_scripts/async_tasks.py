@@ -6,6 +6,7 @@ import time
 
 tasks_run = []
 
+
 @task()
 def clean():
     print("clean ({})".format(threading.current_thread().getName()))
@@ -40,8 +41,9 @@ def ios():
 
 @task(html, images, ios, android)
 def build_all():
-  tasks_run.append('build_all')
-  pass
+    tasks_run.append('build_all')
+    pass
+
 
 def some_utility_method():
     """Some utility method."""
