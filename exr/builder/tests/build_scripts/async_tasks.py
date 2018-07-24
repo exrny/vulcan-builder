@@ -8,34 +8,34 @@ tasks_run = []
 
 @task()
 def clean():
-    tasks_run.append('clean')
     print("clean ({})".format(threading.current_thread().getName()))
+    tasks_run.append('clean')
 
 
 @task(clean)
 def html():
-    tasks_run.append('html')
     print("html ({})".format(threading.current_thread().getName()))
+    tasks_run.append('html')
 
 
 @task()
 def images():
-    tasks_run.append('images')
     print("images ({})".format(threading.current_thread().getName()))
+    tasks_run.append('images')
 
 
 @async_task(clean)
 def android():
     time.sleep(1)
-    tasks_run.append('android')
     print("android ({})".format(threading.current_thread().getName()))
+    tasks_run.append('android')
 
 
 @async_task(clean)
 def ios():
-    time.sleep(3)
-    tasks_run.append('ios')
+    time.sleep(5)
     print("ios ({})".format(threading.current_thread().getName()))
+    tasks_run.append('ios')
 
 
 @task(html, images, ios, android)

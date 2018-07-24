@@ -113,7 +113,7 @@ def _run_default_task(module):
     completed_tasks = dict()
     _run(module, _get_logger(module), default_task, completed_tasks)
     for task in completed_tasks:
-        while not completed_tasks.get(task).result():
+        while completed_tasks.get(task).running():
             time.sleep(0.5)
 
     return True
@@ -134,7 +134,7 @@ def _run_from_task_names(module, task_names):
         _run(module, logger, task, completed_tasks, True, args, kwargs)
 
     for task in completed_tasks:
-        while not completed_tasks.get(task).result():
+        while completed_tasks.get(task).running():
             time.sleep(0.5)
 
 
@@ -202,10 +202,17 @@ def _run(
     """
     # Satsify dependencies recursively. Maintain set of completed tasks so each
     # task is only performed once.
+
+    
+    print('c1:{}'.format(completed_tasks))
+    print('d:{}'.format(' '.join([d.name for d in task.dependencies])))
     for dependency in task.dependencies:
         _run(module, logger, dependency, completed_tasks)
-        for task_name in completed_tasks:
-            while not completed_tasks.get(task_name).result():
+    print('c2:{}'.format(completed_tasks))
+    # for task_name in completed_tasks:
+    for dependency in task.dependencies:
+        if not dependency.ignored:
+            while completed_tasks.get(dependency.name).running():
                 time.sleep(0.5)
 
     # Perform current task, if need to.
@@ -221,20 +228,19 @@ def _run(
 
             try:
                 if task.async_task:
-                    # executor = thread_pool_executor
-                    executor = current_thread_executor
+                    executor = thread_pool_executor
+                    # executor = current_thread_executor
                 else:
                     executor = current_thread_executor
 
+                print('Submiting task: {}'.format(task.name))
                 running_task = executor.submit(task, *(args or []), **(kwargs or {}))
                 completed_tasks[task.name] = running_task
             except Exception:
                 logger.critical("Error starting task \"{name}\"".format(
                     name=task.name))
                 logger.critical("Aborting build")
-                raise
-
-        
+                raise        
 
     return
 

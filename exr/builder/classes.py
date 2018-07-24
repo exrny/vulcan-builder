@@ -56,5 +56,5 @@ class PseudoFutureTask(object):
   def __init__(self):
     pass
 
-  def result(self):
-    return True
+  def running(self):
+    return False
