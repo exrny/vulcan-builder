@@ -204,12 +204,9 @@ def _run(
     # task is only performed once.
 
     
-    print('c1:{}'.format(completed_tasks))
-    print('d:{}'.format(' '.join([d.name for d in task.dependencies])))
     for dependency in task.dependencies:
         _run(module, logger, dependency, completed_tasks)
-    print('c2:{}'.format(completed_tasks))
-    # for task_name in completed_tasks:
+
     for dependency in task.dependencies:
         if not dependency.ignored:
             while completed_tasks.get(dependency.name).running():
@@ -229,11 +226,9 @@ def _run(
             try:
                 if task.async_task:
                     executor = thread_pool_executor
-                    # executor = current_thread_executor
                 else:
                     executor = current_thread_executor
 
-                print('Submiting task: {}'.format(task.name))
                 running_task = executor.submit(task, *(args or []), **(kwargs or {}))
                 completed_tasks[task.name] = running_task
             except Exception:
