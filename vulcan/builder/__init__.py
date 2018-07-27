@@ -2,8 +2,8 @@
 Lightweight Python Build Tool
 '''
 
-from exr.builder.common import nsh, dump, safe_cd
-from ._exrb import task, async_task, main
+from vulcan.builder.common import nsh, dump, safe_cd
+from ._vb import task, async_task, main
 import sh
 import pkgutil
 

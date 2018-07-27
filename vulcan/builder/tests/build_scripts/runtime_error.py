@@ -1,7 +1,7 @@
 """
 Build script with a runtime error.
 """
-from exr.builder import task
+from vulcan.builder import task
 
 
 @task()

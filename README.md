@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/exrny/exr-builder.png?branch=master)](https://travis-ci.org/exrny/exr-builder)
+[![Build Status](https://travis-ci.org/exrny/vulcan-builder.png?branch=master)](https://travis-ci.org/exrny/vulcan-builder)
 
-EXR Builder
+EXR Vulcan Builder
 ===========
 
 This project is a fork of Pynt by [Raghunandan Rao](https://github.com/rags/pynt). We will contribute changes to the original rags/pynt repo.
@@ -20,33 +20,34 @@ A pynt of Python build.
 * Automatically generates a command line interface.
 * Rake style param passing to tasks
 * Supports python 2.7 and python 3.x
+* Async tasks
 
 ## Todo Features
 
-* Async tasks
 * Additional tasks timing reporting 
+* Debug mode
 
 ## Installation
 
 
-You can install exr-builder from the Python Package Index (PyPI) or from source.
+You can install vulcan-builder from the Python Package Index (PyPI) or from source.
 
 Using pip
 
 ```bash
-$ pip install exr-builder
+$ pip install vulcan-builder
 ```
 
 Using easy_install
 
 ```bash
-$ easy_install exr-builder
+$ easy_install vulcan-builder
 ```
 
 ## Example
 
 
-The build script is written in pure Python and exr-builder takes care of managing
+The build script is written in pure Python and vulcan-builder takes care of managing
 any dependencies between tasks and generating a command line interface.
 
 Writing build tasks is really simple, all you need to know is the @task decorator. Tasks are just regular Python 
@@ -106,15 +107,15 @@ def echo(*args,**kwargs):
 __DEFAULT__=start_server
 ```
 
-**Running exr-builder tasks**
+**Running vulcan-builder tasks**
 -----------------------
 
 The command line interface and help is automatically generated. Task descriptions
 are extracted from function docstrings.
 
 ```bash
-$ exrb -h
-usage: exrb [-h] [-l] [-v] [-f file] [task [task ...]]
+$ vb -h
+usage: vb [-h] [-l] [-v] [-f file] [task [task ...]]
 
 positional arguments:
   task                  perform specified task and all its dependencies
@@ -128,7 +129,7 @@ optional arguments:
 ```
 
 ```bash
-$ exrb -l
+$ vb -l
 Tasks in build file ./build.py:
   clean                       Clean build directory.
   copy_file                   
@@ -138,13 +139,13 @@ Tasks in build file ./build.py:
   start_server     [Default]  Start the server
   stop_server                 
 
-Powered by exr-builder - A Lightweight Python Build Tool.
+Powered by vulcan-builder - A Lightweight Python Build Tool.
 ```
           
-exr-builder takes care of dependencies between tasks. In the following case start_server depends on clean, html and image generation (image task is ignored).
+vulcan-builder takes care of dependencies between tasks. In the following case start_server depends on clean, html and image generation (image task is ignored).
 
 ```bash
-$ exrb #Runs the default task start_server. It does exactly what "exrb start_server" would do.
+$ vb #Runs the default task start_server. It does exactly what "vb start_server" would do.
 [ example.py - Starting task "clean" ]
 Cleaning build directory...
 [ example.py - Completed task "clean" ]
@@ -160,7 +161,7 @@ Starting server at localhost:80
 The first few characters of the task name is enough to execute the task, as long as the partial name is unambigious. You can specify multiple tasks to run in the commandline. Again the dependencies are taken taken care of.
 
 ```bash
-$ exrb cle ht cl
+$ vb cle ht cl
 [ example.py - Starting task "clean" ]
 Cleaning build directory...
 [ example.py - Completed task "clean" ]
@@ -174,10 +175,10 @@ Cleaning build directory...
 
 The 'html' task dependency 'clean' is run only once. But clean can be explicitly run again later.
 
-exrb tasks can accept parameters from commandline.
+vb tasks can accept parameters from commandline.
 
 ```bash
-$ exrb "copy_file[/path/to/foo, path_to_bar]"
+$ vb "copy_file[/path/to/foo, path_to_bar]"
 [ example.py - Starting task "clean" ]
 Cleaning build directory...
 [ example.py - Completed task "clean" ]
@@ -186,10 +187,10 @@ Copying from /path/to/foo to path_to_bar
 [ example.py - Completed task "copy_file" ]
 ```
 
-exrb can also accept keyword arguments.
+vb can also accept keyword arguments.
 
 ```bash
-$ exrb start[port=8888]
+$ vb start[port=8888]
 [ example.py - Starting task "clean" ]
 Cleaning build directory...
 [ example.py - Completed task "clean" ]
@@ -201,7 +202,7 @@ Generating HTML in directory "."
 Starting server at localhost:8888
 [ example.py - Completed task "start_server" ]
     
-$ exrb echo[hello,world,foo=bar,blah=123]
+$ vb echo[hello,world,foo=bar,blah=123]
 [ example.py - Starting task "echo" ]
 ('hello', 'world')
 {'blah': '123', 'foo': 'bar'}
@@ -221,11 +222,11 @@ from test_tasks import functional_tests, report_coverage
 ## Contributors/Contributing
 
 
-* Raghunandan Rao - exr-builder is preceded by and forked from [pynt](https://github.com/rags/pynt), which was created by [Raghunandan Rao](https://github.com/rags/pynt).
+* Raghunandan Rao - vulcan-builder is preceded by and forked from [pynt](https://github.com/rags/pynt), which was created by [Raghunandan Rao](https://github.com/rags/pynt).
 * Calum J. Eadie - pynt is preceded by and forked from [microbuild](https://github.com/CalumJEadie/microbuild), which was created by [Calum J. Eadie](https://github.com/CalumJEadie).
 
 
-If you want to make changes the repo is at https://github.com/exrny/exr-builder. You will need [pytest](http://www.pytest.org) to run the tests
+If you want to make changes the repo is at https://github.com/exrny/vulcan-builder. You will need [pytest](http://www.pytest.org) to run the tests
 
 ```bash
 $ ./b t
@@ -233,8 +234,8 @@ $ ./b t
 
 It will be great if you can raise a [pull request](https://help.github.com/articles/using-pull-requests) once you are done.
 
-If you find any bugs or need new features please raise a ticket in the [issues section](https://github.com/exrny/exr-builder/issues) of the github repo.
+If you find any bugs or need new features please raise a ticket in the [issues section](https://github.com/exrny/vulcan-builder/issues) of the github repo.
     
 ## License
 
-exr-builder is licensed under a [MIT license](http://opensource.org/licenses/MIT)
+vulcan-builder is licensed under a [MIT license](http://opensource.org/licenses/MIT)

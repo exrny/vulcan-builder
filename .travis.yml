@@ -15,10 +15,10 @@ install:
   - pip install --upgrade -r requirements-build.txt
 
 script:
-  - python ./exrb-local test
+  - python ./vb-local test
 
 jobs:
   include:
     - stage: deploy
       python: 3.6
-      script: python ./exrb-local pypi
+      script: python ./vb-local pypi

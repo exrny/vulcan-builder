@@ -1,6 +1,6 @@
 import pytest
 import re
-from exr.builder import _exrb, main
+from vulcan.builder import _vb, main
 import sys
 import os
 from os import path
@@ -30,7 +30,7 @@ def reset_build_file(mod):
 def build(mod, params=None, init_mod=reset_build_file):
     dynamically_loaded_mod = simulate_dynamic_module_load(mod)
     dynamically_loaded_mod.tasks_run = []
-    sys.argv = ['exrb', '-f', fpath(mod)] + (params or [])
+    sys.argv = ['vb', '-f', fpath(mod)] + (params or [])
     main()
     return dynamically_loaded_mod
 
@@ -38,34 +38,34 @@ def build(mod, params=None, init_mod=reset_build_file):
 class TestParseArgs:
 
     def test_parsing_commandline(self):
-        args = _exrb._create_parser().parse_args(
+        args = _vb._create_parser().parse_args(
             ['-f', "foo.py", "task1", "task2"])
         assert "foo.py" == args.file
         assert not args.list_tasks
         assert ['task1', 'task2'] == args.tasks
 
     def test_parsing_commandline_help(self):
-        assert _exrb._create_parser().parse_args(["-l"]).list_tasks
-        assert _exrb._create_parser().parse_args(["--list-tasks"]).list_tasks
+        assert _vb._create_parser().parse_args(["-l"]).list_tasks
+        assert _vb._create_parser().parse_args(["--list-tasks"]).list_tasks
 
     def test_parsing_commandline_build_file(self):
-        assert "some_file" == _exrb._create_parser(
+        assert "some_file" == _vb._create_parser(
         ).parse_args(["-f", "some_file"]).file
-        assert "build.py" == _exrb._create_parser().parse_args([]).file
-        assert "/foo/bar" == _exrb._create_parser().parse_args(
+        assert "build.py" == _vb._create_parser().parse_args([]).file
+        assert "/foo/bar" == _vb._create_parser().parse_args(
             ["--file", "/foo/bar"]).file
 
         with pytest.raises(SystemExit):
-            _exrb._create_parser().parse_args(["--file"])
+            _vb._create_parser().parse_args(["--file"])
         with pytest.raises(SystemExit):
-            _exrb._create_parser().parse_args(["-f"])
+            _vb._create_parser().parse_args(["-f"])
 
 
 class TestBuildSimple:
 
     def test_get_tasks(self):
         from .build_scripts import simple
-        ts = _exrb._get_tasks(simple)
+        ts = _vb._get_tasks(simple)
         assert len(ts) == 5
 
 
@@ -76,7 +76,7 @@ class TestBuildWithAsyncTasks:
         self._module = module
 
     def test_get_tasks(self):
-        tasks = _exrb._get_tasks(self._module)
+        tasks = _vb._get_tasks(self._module)
         assert len(tasks) == 6
         assert [task for task in tasks if task.name == 'clean']
         assert [task for task in tasks if task.name == 'html']
@@ -100,7 +100,7 @@ class TestBuildWithDependencies:
 
     def test_get_tasks(self):
         from .build_scripts import dependencies
-        tasks = _exrb._get_tasks(dependencies)
+        tasks = _vb._get_tasks(dependencies)
         assert len(tasks) == 5
         assert 3 == len(
             [task for task in tasks if task.name == 'android'][0].dependencies)
@@ -109,7 +109,7 @@ class TestBuildWithDependencies:
 
     def test_dependencies_for_imported(self):
         from .build_scripts import default_task_and_import_dependencies
-        tasks = _exrb._get_tasks(default_task_and_import_dependencies)
+        tasks = _vb._get_tasks(default_task_and_import_dependencies)
 
         assert 10 == len(tasks)
 
@@ -190,7 +190,7 @@ class TestOptions:
         assert ['clean', 'html', 'android'] == module.tasks_run
 
     def test_docs(self, module):
-        tasks = _exrb._get_tasks(module)
+        tasks = _vb._get_tasks(module)
         assert 4 == len(tasks)
 
         for task_ in tasks:
@@ -202,7 +202,7 @@ class TestOptions:
         with mock_stdout() as out:
             build(module, args)
         stdout = out[0]
-        tasks = _exrb._get_tasks(module)
+        tasks = _vb._get_tasks(module)
         for task in tasks:
             if task.ignored:
                 assert re.findall('%s\\s+%s\\s+%s' %
@@ -261,7 +261,7 @@ class TestDefaultTask:
     def test_simple_default_task(self):
         from .build_scripts import simple
         # returns false if no default task
-        assert _exrb._run_default_task(simple)
+        assert _vb._run_default_task(simple)
 
     def test_mod_with_defaults_which_imports_other_files_with_defaults(self):
         from .build_scripts import default_task_and_import_dependencies

@@ -13,12 +13,12 @@ import imp
 import sys
 import time
 import concurrent.futures
-from exr.meta_builder import __version__
-from exr.builder.classes import CurrentThreadExecutor
-from exr.builder.classes import Task
-# from exr.builder.classes import LoggerWrapper
+from vulcan.meta_builder import __version__
+from vulcan.builder.classes import CurrentThreadExecutor
+from vulcan.builder.classes import Task
+# from vulcan.builder.classes import LoggerWrapper
 
-_CREDIT_LINE = ("Powered by exrb %s "
+_CREDIT_LINE = ("Powered by vb %s "
                 "- A Lightweight Python Build Tool." % __version__)
 _LOGGING_FORMAT = "[ %(name)s - %(message)s ]"
 _TASK_PATTERN = re.compile("^([^\\[]+)(\\[([^\\]]*)\\])?$")
@@ -47,7 +47,7 @@ def build(args):
     args = parser.parse_args(args)
 
     if args.version:
-        print('exrb %s' % __version__)
+        print('vb %s' % __version__)
         sys.exit(0)
 
     # load build file as a module

@@ -1,13 +1,13 @@
 from setuptools import setup
-import exr.meta_builder
+import vulcan.builder.meta_builder
 setup(
-    name="exr-builder",
-    version=exr.meta_builder.__version__,
+    name="vulcan-builder",
+    version=vulcan.meta_builder.__version__,
     author="Peter Salnikov",
     author_email="opensource@exrny.com",
-    url=exr.meta_builder.__website__,
-    packages=["exr", "exr.builder"],
-    entry_points={'console_scripts': ['exrb=exr.builder:main']},
+    url=vulcan.meta_builder.__website__,
+    packages=["vulcan", "vulcan.builder"],
+    entry_points={'console_scripts': ['vb=vulcan.builder:main']},
     install_requires=['sh'],
     license="MIT License",
     classifiers=[

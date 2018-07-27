@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-from exr.builder import task
+from vulcan.builder import task
 
-from exr.builder.tests.build_scripts.build_with_params import *
-from exr.builder.tests.build_scripts import build_with_params
+from vulcan.builder.tests.build_scripts.build_with_params import *
+from vulcan.builder.tests.build_scripts import build_with_params
 
 tasks_run = []
 

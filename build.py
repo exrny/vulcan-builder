@@ -1,5 +1,5 @@
 import sys, re, os
-from exr.builder import task
+from vulcan.builder import task
 import sh
 
 @task()
@@ -12,7 +12,7 @@ def apidoc():
 
 @task()
 def validate():
-    sh.pycodestyle('exr', '--max-line-length=110', _out=sys.stdout, _err_to_out=True)
+      sh.pycodestyle('vulcan', '--max-line-length=110', _out=sys.stdout, _err_to_out=True)
 
     
 @task(validate)
@@ -37,7 +37,7 @@ def generate_rst():
 
 @task()
 def update_version(ver = None):
-  with open('exr/meta_builder.py', 'r') as f:
+  with open('vulcan/meta_builder.py', 'r') as f:
     file_str = f.read()
 
   if not ver:
@@ -54,21 +54,21 @@ def update_version(ver = None):
       '__version__ = "{}"\n'.format(ver),
       file_str)
 
-  with open('exr/meta_builder.py', 'w') as f:
+  with open('vulcan/meta_builder.py', 'w') as f:
     f.write(file_str)
 
-  sh.git('commit', 'exr/meta_builder.py', '-m', 'Version updated to {}'.format(ver), _out=sys.stdout, _err_to_out=True)
+  sh.git('commit', 'vulcan/meta_builder.py', '-m', 'Version updated to {}'.format(ver), _out=sys.stdout, _err_to_out=True)
 
 @task()
 def create_tag():
-  with open('exr/meta_builder.py', 'r') as f:
+  with open('vulcan/meta_builder.py', 'r') as f:
     file_str = f.read()
   regexp = re.compile('__version__\s*\=\s*\"([\d\w\.\-\_]+)\"\s*')
   m = regexp.search(file_str)
   if m:
     ver = m.group(1)
   else:
-    raise "Can't find/parse current version in './exr/meta_builder.py'"
+    raise "Can't find/parse current version in './vulcan/meta_builder.py'"
 
   sh.git.tag('-a', '-m', 'Tagging version {}'.format(ver), ver, _out=sys.stdout, _err_to_out=True)
 
@@ -101,7 +101,7 @@ def pypi():
     args.append('--repository-url')
     args.append('https://test.pypi.org/legacy/')
 
-  args.append('dist/exr-builder-*')
+  args.append('dist/vulcan-builder-*')
 
   sh.twine(args, _out=sys.stdout, _err_to_out=True)
 

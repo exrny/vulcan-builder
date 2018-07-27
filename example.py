@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from exr.builder import task
+from vulcan.builder import task
 
 @task()
 def clean():
