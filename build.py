@@ -92,7 +92,7 @@ def pypi():
   sh.python('setup.py', 'sdist', _out=sys.stdout, _err_to_out=True)
   args = ['upload']
   
-  travis_pull_request = os.environ.get('TRAVIS_PULL_REQUEST', False) == 'true'
+  travis_pull_request = (os.environ.get('TRAVIS_PULL_REQUEST', 'false') == 'true')
   travis_tag = os.environ.get('TRAVIS_TAG', False)
   
   if not travis_pull_request and travis_tag:
