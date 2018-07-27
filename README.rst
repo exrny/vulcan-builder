@@ -1,13 +1,13 @@
 `Build Status <https://travis-ci.org/exrny/vulcan-builder>`__
 
-EXR Vulcan Builder
-==================
+Vulcan Builder
+==============
 
 This project is a fork of Pynt by `Raghunandan
 Rao <https://github.com/rags/pynt>`__. We will contribute changes to the
 original rags/pynt repo.
 
-EXR Builder supports EXR’s applications via a lightweight, concise
+Vulcan Builder supports EXR’s applications via a lightweight, concise
 Python DevOps tool. We will develop our own improvements on the initial
 rags/pynt repo here and publish improvements to the original repo.
 
@@ -252,7 +252,7 @@ https://github.com/exrny/vulcan-builder. You will need
 
 .. code:: bash
 
-   $ ./b t
+   $ ./vb t
 
 It will be great if you can raise a `pull
 request <https://help.github.com/articles/using-pull-requests>`__ once
