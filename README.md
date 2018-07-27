@@ -1,11 +1,11 @@
 [![Build Status](https://travis-ci.org/exrny/vulcan-builder.png?branch=master)](https://travis-ci.org/exrny/vulcan-builder)
 
-EXR Vulcan Builder
+Vulcan Builder
 ===========
 
 This project is a fork of Pynt by [Raghunandan Rao](https://github.com/rags/pynt). We will contribute changes to the original rags/pynt repo.
 
-EXR Builder supports EXR’s applications via a lightweight, concise Python DevOps tool. We will develop our own improvements on the initial rags/pynt repo here and publish improvements to the original repo.
+Vulcan Builder supports EXR’s applications via a lightweight, concise Python DevOps tool. We will develop our own improvements on the initial rags/pynt repo here and publish improvements to the original repo.
 
 This is an EXR Open Source project.
 
@@ -229,7 +229,7 @@ from test_tasks import functional_tests, report_coverage
 If you want to make changes the repo is at https://github.com/exrny/vulcan-builder. You will need [pytest](http://www.pytest.org) to run the tests
 
 ```bash
-$ ./b t
+$ ./vb t
 ```
 
 It will be great if you can raise a [pull request](https://help.github.com/articles/using-pull-requests) once you are done.
