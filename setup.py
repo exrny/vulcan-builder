@@ -1,5 +1,5 @@
 from setuptools import setup
-import vulcan.builder.meta_builder
+import vulcan.meta_builder
 setup(
     name="vulcan-builder",
     version=vulcan.meta_builder.__version__,
