@@ -81,8 +81,8 @@ def push():
 def release(ver = None):
   check_uncommited()
   update_version(ver)
-  create_tag()
   generate_rst()
+  create_tag()
   push()
 
 @task(test)
