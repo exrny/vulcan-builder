@@ -32,7 +32,7 @@ def android():
     tasks_run.append('android')
 
 
-@async_task(clean)
+@async_task()
 def ios():
     time.sleep(5)
     print("ios ({})".format(threading.current_thread().getName()))
@@ -42,6 +42,11 @@ def ios():
 @task(html, images, ios, android)
 def build_all():
     tasks_run.append('build_all')
+    pass
+
+
+@task(build_all)
+def default_task():
     pass
 
 

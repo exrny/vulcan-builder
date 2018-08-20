@@ -18,6 +18,10 @@ def dump(obj):
     print('DUMP: {}'.format(json.dumps(obj, indent=1, default=json_serial)))
 
 
+def dumps(obj):
+    return json.dumps(obj, indent=1, default=json_serial)
+
+
 @contextlib.contextmanager
 def safe_cd(path):
     starting_directory = os.getcwd()

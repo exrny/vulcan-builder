@@ -2,7 +2,7 @@
 Lightweight Python Build Tool
 '''
 
-from vulcan.builder.common import nsh, dump, safe_cd
+from vulcan.builder.common import nsh, dump, dumps, safe_cd
 from ._vb import task, async_task, main
 import sh
 import pkgutil
@@ -13,5 +13,6 @@ __all__ = [
     'task', 'async_task',
     'main',
     'nsh', 'sh',
-    'dump', 'safe_cd'
+    'dump', 'dumps',
+    'safe_cd'
   ]
