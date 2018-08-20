@@ -77,7 +77,7 @@ class TestBuildWithAsyncTasks:
 
     def test_get_tasks(self):
         tasks = _vb._get_tasks(self._module)
-        assert len(tasks) == 6
+        assert len(tasks) == 7
         assert [task for task in tasks if task.name == 'clean']
         assert [task for task in tasks if task.name == 'html']
         assert [task for task in tasks if task.name == 'images']
