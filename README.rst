@@ -1,4 +1,4 @@
-`Build Status <https://travis-ci.org/exrny/vulcan-builder>`__
+|Build Status|
 
 Vulcan Builder
 ==============
@@ -267,3 +267,6 @@ License
 
 vulcan-builder is licensed under a `MIT
 license <http://opensource.org/licenses/MIT>`__
+
+.. |Build Status| image:: https://travis-ci.org/exrny/vulcan-builder.png?branch=master
+   :target: https://travis-ci.org/exrny/vulcan-builder
