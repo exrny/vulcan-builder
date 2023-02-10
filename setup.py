@@ -8,7 +8,7 @@ setup(
     url=vulcan.meta_builder.__website__,
     packages=["vulcan", "vulcan.builder"],
     entry_points={'console_scripts': ['vb=vulcan.builder:main']},
-    install_requires=['sh'],
+    install_requires=['sh>=1,<2'],
     license="MIT License",
     classifiers=[
         'Development Status :: 4 - Beta',
