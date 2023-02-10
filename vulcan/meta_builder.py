@@ -1,4 +1,4 @@
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 __license__ = "MIT License"
 __website__ = "https://code.exrny.com/opensource/vulcan-builder/"
 __download_url__ = ('https://github.com/exrny/vulcan-builder/archive/'
